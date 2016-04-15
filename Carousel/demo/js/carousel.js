@@ -30,6 +30,58 @@ var Carousel = (function($) {
             obj.style.zIndex = 2;
         }
     };
+    //根据轨迹运动
+    var _transition = function(slides, deg, diff, config) {
+            var n = slides.length;
+            // return(deg);
+            console.log("---transition----" + _current_slide_index);
+            // return;
+            var _cantransition = true;
+            for (var i = 0; i < n; i++) {
+                _setPosition(slides[i], 2 * Math.PI * (i - _current_slide_index) / n + _dxrad, config);
+            }
+            if (diff > 0) {
+                _dxrad = _dxrad + 0.03;
+                if (_dxrad >= deg) {
+                    _dxrad = deg;
+                    _cantransition = false;
+                }
+            } else {
+                _dxrad = _dxrad - 0.03;
+                if (Math.abs(_dxrad) >= deg) {
+                    _dxrad = deg;
+                    _cantransition = false;
+                }
+            }
+            // console.log(_dxrad, deg)
+            // console.log(_cantransition);
+            // if (_dxrad >= Math.PI) _dxrad = _dxrad - Math.PI;
+            if (_cantransition) {
+                // setTimeout(this.uid + ".transition(" + n + ", " + deg + "," + diff + ")", 1000 / 60 / 10);
+                setTimeout(function() {
+                    _transition(slides,deg,diff,config);
+                }, 1000 / 60 /10);
+            } else {
+                _dxrad = 0.1;
+                if (diff < 0) {
+                    _current_slide_index = _current_slide_index + 1 >= n ? 0 : _current_slide_index + 1;
+                } else {
+                    _current_slide_index = _current_slide_index - 1 < 0 ? n : _current_slide_index - 1;
+                }
+                for (var i = 0; i < n; i++) {
+                    var _item = slides[i];
+                    _setPosition(_item, 2 * Math.PI * (i - _current_slide_index) / n, config);
+                }
+
+                // console.log("---transition-end---" + _current_slide_index);
+                // 给当前slide加入current-slide样式;
+                // that.el.find(".carousel-slide").removeClass("current-slide");
+                // that.el.find(".carousel-slide:nth-child(" +(_current_slide_index + 1) +")").addClass("current-slide");
+                // if (that.config.onTransitionEnd) {
+                //     that.config.onTransitionEnd(_current_slide_index, $(".current-slide")[0], that);
+                // }
+            }
+        };
 
     var Carousel = function(selector, options) {
         var el = $(selector);
@@ -41,9 +93,9 @@ var Carousel = (function($) {
 
         init: function(el, opt) {
             this.el = el;
-            this.uid = "move_" + Math.random();
-            this.uid = this.uid.replace(".", "");
-            eval("window." + this.uid + "=this;");
+            // this.uid = "move_" + Math.random();
+            // this.uid = this.uid.replace(".", "");
+            // eval("window." + this.uid + "=this;");
             this.config = {
                 a:100,
                 b:60
@@ -96,55 +148,58 @@ var Carousel = (function($) {
         //     if (_dxrad >= Math.PI) _dxrad = _dxrad - Math.PI;
         //     window.setTimeout(this.uid + ".play(" + n + ")", 120);
         // },
-        //根据轨迹运动
-        transition: function(n, deg, diff) {
-            var that = this;
-            // return(deg);
-            console.log("---transition----" + _current_slide_index);
-            // return;
-            var _cantransition = true;
-            for (var i = 0; i < n; i++) {
-                _setPosition(this.items[i], 2 * Math.PI * (i - _current_slide_index) / n + _dxrad, that.config);
-            }
-            if (diff > 0) {
-                _dxrad = _dxrad + 0.03;
-                if (_dxrad >= deg) {
-                    _dxrad = deg;
-                    _cantransition = false;
-                }
-            } else {
-                _dxrad = _dxrad - 0.03;
-                if (Math.abs(_dxrad) >= deg) {
-                    _dxrad = deg;
-                    _cantransition = false;
-                }
-            }
-            // console.log(_dxrad, deg)
-            // console.log(_cantransition);
-            // if (_dxrad >= Math.PI) _dxrad = _dxrad - Math.PI;
-            if (_cantransition) {
-                setTimeout(this.uid + ".transition(" + n + ", " + deg + "," + diff + ")", 1000 / 60 / 10);
-            } else {
-                _dxrad = 0.1;
-                if (diff < 0) {
-                    _current_slide_index = _current_slide_index + 1 >= n ? 0 : _current_slide_index + 1;
-                } else {
-                    _current_slide_index = _current_slide_index - 1 < 0 ? n : _current_slide_index - 1;
-                }
-                for (var i = 0; i < n; i++) {
-                    var _item = that.items[i];
-                    _setPosition(_item, 2 * Math.PI * (i - _current_slide_index) / n, that.config);
-                }
+        // //根据轨迹运动
+        // transition: function(n, deg, diff) {
+        //     var that = this;
+        //     // return(deg);
+        //     console.log("---transition----" + _current_slide_index);
+        //     // return;
+        //     var _cantransition = true;
+        //     for (var i = 0; i < n; i++) {
+        //         _setPosition(this.items[i], 2 * Math.PI * (i - _current_slide_index) / n + _dxrad, that.config);
+        //     }
+        //     if (diff > 0) {
+        //         _dxrad = _dxrad + 0.03;
+        //         if (_dxrad >= deg) {
+        //             _dxrad = deg;
+        //             _cantransition = false;
+        //         }
+        //     } else {
+        //         _dxrad = _dxrad - 0.03;
+        //         if (Math.abs(_dxrad) >= deg) {
+        //             _dxrad = deg;
+        //             _cantransition = false;
+        //         }
+        //     }
+        //     // console.log(_dxrad, deg)
+        //     // console.log(_cantransition);
+        //     // if (_dxrad >= Math.PI) _dxrad = _dxrad - Math.PI;
+        //     if (_cantransition) {
+        //         // setTimeout(this.uid + ".transition(" + n + ", " + deg + "," + diff + ")", 1000 / 60 / 10);
+        //         setTimeout(function() {
+        //             that.transition(n,deg,diff);
+        //         }, 1000 / 60 /10);
+        //     } else {
+        //         _dxrad = 0.1;
+        //         if (diff < 0) {
+        //             _current_slide_index = _current_slide_index + 1 >= n ? 0 : _current_slide_index + 1;
+        //         } else {
+        //             _current_slide_index = _current_slide_index - 1 < 0 ? n : _current_slide_index - 1;
+        //         }
+        //         for (var i = 0; i < n; i++) {
+        //             var _item = that.items[i];
+        //             _setPosition(_item, 2 * Math.PI * (i - _current_slide_index) / n, that.config);
+        //         }
 
-                // console.log("---transition-end---" + _current_slide_index);
-                // 给当前slide加入current-slide样式;
-                that.el.find(".carousel-slide").removeClass("current-slide");
-                that.el.find(".carousel-slide:nth-child(" +(_current_slide_index + 1) +")").addClass("current-slide");
-                if (that.config.onTransitionEnd) {
-                    that.config.onTransitionEnd(_current_slide_index, $(".current-slide")[0], that);
-                }
-            }
-        },
+        //         // console.log("---transition-end---" + _current_slide_index);
+        //         // 给当前slide加入current-slide样式;
+        //         that.el.find(".carousel-slide").removeClass("current-slide");
+        //         that.el.find(".carousel-slide:nth-child(" +(_current_slide_index + 1) +")").addClass("current-slide");
+        //         if (that.config.onTransitionEnd) {
+        //             that.config.onTransitionEnd(_current_slide_index, $(".current-slide")[0], that);
+        //         }
+        //     }
+        // },
         onTouchStart: function() {
             /*$(".luckey-bags-slide").css({
                         "-webkit-transition-duration": "0ms"
@@ -249,7 +304,7 @@ var Carousel = (function($) {
 
                 // console.log(_current_slide_index);
                 if (_nowTime - _touchstart_time < 200 && Math.abs(_touches.diff) > 50) {
-                    that.transition(n, 2 * Math.PI / n, _touches.diff);
+                    _transition(that.items, 2 * Math.PI / n, _touches.diff,that.config);
                 } else {
                     that.el.find('.carousel-slide').css({
                         "webkitTransitionDuration": "120ms"
