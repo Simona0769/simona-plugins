@@ -19,6 +19,8 @@ onTouchMove:function(activeIndex,carousel) {} //移动事件  回调函数中:ac
 onTransitionEnd:function(activeIndex,currentSlide,carousel) {} //变换结束事件  回调函数中:activeIndex 当前slide下标；currentSlide：当前slide； carousel 当前插件对象
 
 #事件
+
 next(); //跳到下一slide
+
 prev(); //跳到上一slide
 
