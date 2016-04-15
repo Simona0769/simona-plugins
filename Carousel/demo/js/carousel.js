@@ -45,7 +45,7 @@ var Carousel = (function($) {
             this.uid = this.uid.replace(".", "");
             eval("window." + this.uid + "=this;");
             this.config = {
-                a:150,
+                a:100,
                 b:60
             };
             this.config = $.extend(this.config, opt || {});
@@ -55,7 +55,7 @@ var Carousel = (function($) {
             _top = this.config.b * 0.5;
             // _dxrad = 1.58;
             var images = this.el.find(".carousel-slide");
-            $(images[0]).addClass("current-slide");
+            images.eq(0).addClass("current-slide");
             var n = images.length;
             for (var i = 0; i < n; i++) {
                 this.items = images;
