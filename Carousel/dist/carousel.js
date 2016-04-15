@@ -289,7 +289,7 @@ var Carousel = (function($) {
 
     return Carousel;
 
-})(window.jQuery || {});
+})(window.jQuery || window.Zepto || {});
 
 /*=========================
 Carousel AMD Export
